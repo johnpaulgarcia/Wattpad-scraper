@@ -1,6 +1,7 @@
 import tempfile
 
 import flask
+import os
 from wattpad_scraper import get_story, parse_soup
 from flask import request, render_template, send_file
 
