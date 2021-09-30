@@ -55,7 +55,7 @@ def get_story(url, soup):
         return str(soup.title.string).encode("ascii", 'ignore').decode("utf-8").partition("-")[0].strip()
 
     def parse_chapter_title(soup):
-        return soup.find('article').find('h2').text.strip()
+        return soup.find('article').find('.h2').text.strip()
 
     def write_row(next_page_url):
         return "\n{}".format(str(next_page_url))
