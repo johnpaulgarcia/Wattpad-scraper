@@ -24,12 +24,27 @@ window.addEventListener('load', (event) => {
 
     socket.onmessage = function({data}) {
         let textFile = null;
-        if(JSON.parse(data)){
-            let {status} = JSON.parse(data);
-            notice.innerText = `May ${status} na!`
-        }
+        try{
+            if(JSON.parse(data)){
+                let {status} = JSON.parse(data);
+                notice.innerText = `May ${status} na!`
+            }
 
-        else {
+            else {
+                let story = eval(data).join("\n");
+                var data = new Blob([story], {type: 'text/plain'});
+                if (textFile !== null) {
+                    window.URL.revokeObjectURL(textFile);
+                }
+                textFile = window.URL.createObjectURL(data);
+                let a = document.createElement('a');
+                a.href=textFile;
+                a.download="file.txt";
+                a.click()
+                notice.innerText = "tapos na. :)"
+            }
+        }
+        catch(e){
             let story = eval(data).join("\n");
             var data = new Blob([story], {type: 'text/plain'});
             if (textFile !== null) {
