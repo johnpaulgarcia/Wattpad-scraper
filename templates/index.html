@@ -9,6 +9,8 @@
 <div>
     <input id="url" type="text" class="c-field" name="url"/><br/>
     <button id="submit" type="submit" class="c-button" value="Submit">OK</button>
+    <br />
+    <h1 id="notice"></h1>
 </div>
 
 <script>
@@ -16,6 +18,7 @@
 window.addEventListener('load', (event) => {
     let url = document.getElementById('url');
     let submit = document.getElementById('submit');
+    let notice = document.getElementById('notice')
 
     submit.onclick = submitClicked;
 
@@ -31,9 +34,12 @@ window.addEventListener('load', (event) => {
         a.href=textFile;
         a.download="file.txt";
         a.click()
+        notice.innerText = "tapos na. :)"
     };
 
     function submitClicked(){
+        notice.style = "color: green;"
+        notice.innerText = "Paki wait unti lang..."
         let link = url.value;
         socket.send(link);
     }
