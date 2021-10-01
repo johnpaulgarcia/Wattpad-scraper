@@ -14,7 +14,7 @@ def download_txt(ws):
         try:
             url = ws.receive()
             soup = parse_soup(url)
-            title, story = get_story(url, soup)
+            title, story = get_story(url, soup, ws)
             with tempfile.NamedTemporaryFile('w', encoding='utf8', delete=False) as temp:
                 temp.writelines(story)
                 temp.flush()

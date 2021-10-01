@@ -46,7 +46,7 @@ def parse_soup(url):
             attempt += 1
 
 
-def get_story(url, soup):
+def get_story(url, soup, ws):
     def strip_url(url):
         url = re.sub(r"/page/\d+", '', url)
         return url if url[-1] != '/' else url[:-1]
@@ -80,10 +80,11 @@ def get_story(url, soup):
     title = parse_title(soup)
     story = ['\n', title, '\n', ]
     next_chapter_url = strip_url(url)
+    z = 1
     while soup and soup.find('article'):
         chapter_title = parse_chapter_title(soup)
         story.append(write_row(chapter_title))
-
+        ws.send('{"status":"'+str(z)+'"}')
         # Parse base page
         print(next_chapter_url)
         page = soup_or_none(next_chapter_url)
@@ -105,6 +106,7 @@ def get_story(url, soup):
         next_chapter_url = get_next_page_url(soup)
         soup = soup_or_none(next_chapter_url)
         story.append(write_row(next_chapter_url))
+        z = z+1
 
     return title, story
 
