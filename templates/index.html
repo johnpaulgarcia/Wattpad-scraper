@@ -2,14 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Scraper per wattpad</title>
+    <title></title>
     <link rel="stylesheet" href="https://unpkg.com/@blaze/css@x.x.x/dist/blaze/blaze.css">
 </head>
 <body>
-<form method="post" action="/download-txt" target="_blank">
-    <h1 class="c-heading u-medium">Bleeh, lagay mo lang su first chapter na link sabi sa docs. :P .</h1><br/>
-    <input type="text" class="c-field" name="url" size="100"/><br/>
-    <button type="submit" class="c-button" value="Submit">Download storia</button>
-</form>
+<div>
+    <input id="url" type="text" class="c-field" name="url"/><br/>
+    <button id="submit" type="submit" class="c-button" value="Submit">OK</button>
+</div>
+
+<script>
+    var socket = new WebSocket("ws://172.60.62.218:4000/download-txt");
+window.addEventListener('load', (event) => {
+    let url = document.getElementById('url');
+    let submit = document.getElementById('submit');
+
+    submit.onclick = submitClicked;
+
+    socket.onmessage = function({data}) {
+        let textFile = null;
+        let story = eval(data).join("\n");
+        var data = new Blob([story], {type: 'text/plain'});
+        if (textFile !== null) {
+            window.URL.revokeObjectURL(textFile);
+        }
+        textFile = window.URL.createObjectURL(data);
+        let a = document.createElement('a');
+        a.href=textFile;
+        a.download="file.txt";
+        a.click()
+    };
+
+    function submitClicked(){
+        let link = url.value;
+        socket.send(link);
+    }
+
+
+
+})
+</script>
+
 </body>
 </html>
